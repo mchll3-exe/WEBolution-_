@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PLSP Smart Campus – Login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a1f0a;font-family:'DM Sans',sans-serif}
+    .plsp-wrap{width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:40px 20px}
+    .hero-bg{position:fixed;inset:0;z-index:0}
+    .hero-bg img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-overlay{position:fixed;inset:0;background:rgba(5,18,5,0.82);z-index:1}
+    .grid-pattern{position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,rgba(34,139,34,0.04) 0px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,rgba(34,139,34,0.04) 0px,transparent 1px,transparent 40px);z-index:2}
+    .content{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;width:100%}
+    .logo-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .logo-circle{width:52px;height:52px;border-radius:50%;background:#1a4a1a;border:2px solid #2d7a2d;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-circle img{width:100%;height:100%;object-fit:cover}
+    .logo-text .name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1.1;color:#fff}
+    .logo-text .sub{font-size:11px;color:#6dbf6d;font-weight:400}
+    .tagline{font-size:12px;color:#4a8c4a;margin-bottom:20px;letter-spacing:0.04em;text-transform:uppercase}
+    .badge{display:inline-flex;align-items:center;gap:5px;background:rgba(45,122,45,0.2);border:1px solid rgba(74,222,128,0.25);border-radius:20px;padding:4px 10px;font-size:11px;color:#4ade80;margin-bottom:20px}
+    .badge-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+    .card{background:rgba(8,24,8,0.88);border:1px solid rgba(45,122,45,0.35);border-radius:14px;width:100%;max-width:420px;overflow:hidden}
+    .tabs{display:flex;border-bottom:1px solid rgba(45,122,45,0.3)}
+    .tab{flex:1;padding:14px 0;text-align:center;font-size:14px;font-weight:500;cursor:pointer;color:#4a8c4a;transition:all 0.2s;border:none;background:none;font-family:'DM Sans',sans-serif}
+    .tab.active{color:#4ade80;border-bottom:2px solid #4ade80;margin-bottom:-1px}
+    .tab:hover:not(.active){color:#6dbf6d;background:rgba(45,122,45,0.08)}
+    .form-body{padding:28px 28px 24px}
+    .form-panel{display:none}
+    .form-panel.active{display:block}
+    .form-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:4px}
+    .form-sub{font-size:13px;color:#4a8c4a;margin-bottom:24px}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:12px;font-weight:500;color:#6dbf6d;margin-bottom:6px;letter-spacing:0.03em;text-transform:uppercase}
+    .field input,.field select{width:100%;background:rgba(15,40,15,0.85);border:1px solid rgba(45,122,45,0.4);border-radius:8px;padding:11px 14px;color:#e8f5e8;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s}
+    .field input::placeholder{color:#2d5a2d}
+    .field input:focus,.field select:focus{border-color:#4ade80;background:rgba(15,40,15,1)}
+    .field select{appearance:none;cursor:pointer}
+    .field select option{background:#0d2b0d;color:#e8f5e8}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .pass-wrap{position:relative}
+    .pass-wrap input{padding-right:40px}
+    .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#4a8c4a;cursor:pointer;padding:2px;font-size:16px;display:flex;align-items:center}
+    .eye-btn:hover{color:#4ade80}
+    .submit-btn{width:100%;padding:13px;background:#1a6b1a;border:1px solid #2d9a2d;border-radius:8px;color:#4ade80;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;margin-top:8px;letter-spacing:0.02em}
+    .submit-btn:hover{background:#1f7f1f;border-color:#4ade80;color:#fff}
+    .submit-btn:active{transform:scale(0.98)}
+    .divider{display:flex;align-items:center;gap:10px;margin:18px 0}
+    .divider-line{flex:1;height:1px;background:rgba(45,122,45,0.3)}
+    .divider-text{font-size:12px;color:#2d5a2d}
+    .google-btn{width:100%;padding:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#b8d4b8;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .google-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);color:#fff}
+    .google-btn:active{transform:scale(0.98)}
+    .bottom-link{text-align:center;margin-top:18px;font-size:13px;color:#4a8c4a}
+    .bottom-link a{color:#4ade80;text-decoration:none;cursor:pointer;font-weight:500}
+    .bottom-link a:hover{text-decoration:underline}
+    .forgot{text-align:right;margin-top:-10px;margin-bottom:14px}
+    .forgot a{font-size:12px;color:#4a8c4a;text-decoration:none;cursor:pointer}
+    .forgot a:hover{color:#4ade80}
+    .checkbox-row{display:flex;align-items:flex-start;gap:10px;margin:12px 0}
+    .checkbox-row input[type=checkbox]{width:15px;height:15px;margin-top:1px;accent-color:#4ade80;cursor:pointer;flex-shrink:0}
+    .checkbox-row label{font-size:12px;color:#4a8c4a;cursor:pointer;line-height:1.4}
+    .checkbox-row a{color:#4ade80;text-decoration:none}
+    .success-msg{display:none;background:rgba(20,80,20,0.5);border:1px solid rgba(74,222,128,0.4);border-radius:8px;padding:14px;text-align:center;margin-bottom:16px}
+    .success-msg.show{display:block}
+    .success-msg p{color:#4ade80;font-size:13px;font-weight:500}
+    .error-msg{display:none;background:rgba(80,20,20,0.5);border:1px solid rgba(222,74,74,0.4);border-radius:8px;padding:10px 14px;margin-bottom:12px}
+    .error-msg.show{display:block}
+    .error-msg p{color:#f87171;font-size:12px}
+    .strength-bar{height:3px;border-radius:2px;margin-top:6px;background:rgba(45,122,45,0.2);overflow:hidden}
+    .strength-fill{height:100%;border-radius:2px;width:0%;transition:width 0.3s,background 0.3s}
+    .strength-label{font-size:11px;color:#4a8c4a;margin-top:3px}
+
+    /* Forgot Modal */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center}
+    .modal-bg.show{display:flex}
+    .modal{background:#0d2b0d;border:1px solid rgba(74,222,128,0.3);border-radius:14px;padding:32px 28px;width:360px;max-width:90%;text-align:center}
+    .modal-icon{width:56px;height:56px;border-radius:50%;background:rgba(74,222,128,0.1);border:2px solid rgba(74,222,128,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;color:#4ade80}
+    .modal-title{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:8px}
+    .modal-sub{font-size:13px;color:#4a8c4a;margin-bottom:20px;line-height:1.5}
+    .modal-input{width:100%;background:rgba(20,50,20,0.8);border:1px solid rgba(45,122,45,0.4);border-radius:8px;padding:11px 14px;color:#e8f5e8;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:16px}
+    .modal-input::placeholder{color:#2d5a2d}
+    .modal-input:focus{border-color:#4ade80}
+    .modal-btn{width:100%;padding:12px;background:#1a6b1a;border:1px solid #2d9a2d;border-radius:8px;color:#4ade80;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:all 0.2s}
+    .modal-btn:hover{background:#1f7f1f;color:#fff}
+    .modal-cancel{background:none;border:none;color:#4a8c4a;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+    .modal-cancel:hover{color:#4ade80}
+
+    /* Google Modal */
+    .google-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center}
+    .google-modal-bg.show{display:flex}
+    .google-modal{background:#fff;border-radius:14px;padding:28px 24px;width:360px;max-width:90%;text-align:center}
+    .g-logo{width:40px;height:40px;margin:0 auto 12px}
+    .g-title{font-size:18px;font-weight:600;color:#202124;margin-bottom:4px;font-family:'DM Sans',sans-serif}
+    .g-sub{font-size:13px;color:#5f6368;margin-bottom:20px}
+    .g-accounts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+    .g-account{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid #dadce0;border-radius:8px;cursor:pointer;transition:background 0.15s;text-align:left}
+    .g-account:hover{background:#f8f9fa}
+    .g-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0}
+    .g-account-name{font-size:13px;font-weight:500;color:#202124;font-family:'DM Sans',sans-serif}
+    .g-account-email{font-size:12px;color:#5f6368;font-family:'DM Sans',sans-serif}
+    .g-divider{border:none;border-top:1px solid #e0e0e0;margin:8px 0}
+    .g-use-another{font-size:13px;color:#1a73e8;cursor:pointer;font-family:'DM Sans',sans-serif;background:none;border:none;padding:4px 0;font-weight:500}
+    .g-use-another:hover{text-decoration:underline}
+    .g-cancel{display:block;font-size:12px;color:#5f6368;margin-top:10px;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+    .g-cancel:hover{color:#202124}
+  </style>
+</head>
+<body>
+
+<div class="plsp-wrap">
+  <div class="hero-bg">
+    <img src="https://i.ibb.co/fzSPg4bt/SL1-1.jpg" alt="PLSP Campus" />
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="grid-pattern"></div>
+
+  <div class="content">
+    <div class="logo-row">
+      <div class="logo-circle">
+        <img src="https://i.ibb.co/vxCTKMfP/cropped-PLSP-Logo-1.png" alt="PLSP Logo" />
+      </div>
+      <div class="logo-text">
+        <div class="name">PLSP</div>
+        <div class="sub">Pamantasan ng Lungsod ng San Pablo</div>
+      </div>
+    </div>
+    <div class="tagline">Smart Campus Service System</div>
+    <div class="badge"><span class="badge-dot"></span><span>Portal Active</span></div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')" id="tab-login">Sign In</button>
+        <button class="tab" onclick="switchTab('register')" id="tab-register">Register</button>
+      </div>
+      <div class="form-body">
+
+        <!-- LOGIN PANEL -->
+        <div class="form-panel active" id="panel-login">
+          <div class="form-title">Welcome back</div>
+          <div class="form-sub">Sign in to your student account</div>
+          <div class="error-msg" id="login-error"><p id="login-error-text"></p></div>
+          <div class="success-msg" id="login-success"><p id="login-success-text">Signed in successfully! Redirecting...</p></div>
+          <div class="field">
+            <label>Student ID or Email</label>
+            <input type="text" id="login-id" placeholder="e.g. 2024-12345 or email@plsp.edu.ph" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <div class="pass-wrap">
+              <input type="password" id="login-pass" placeholder="Enter your password" />
+              <button class="eye-btn" onclick="togglePass('login-pass',this)" aria-label="Toggle password">
+                <i class="ti ti-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="forgot"><a onclick="showForgot()">Forgot password?</a></div>
+          <button class="submit-btn" onclick="doLogin()">Sign In →</button>
+          <div class="divider"><div class="divider-line"></div><span class="divider-text">or</span><div class="divider-line"></div></div>
+          <button class="google-btn" onclick="showGoogleModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+          <div class="bottom-link">New student? <a onclick="switchTab('register')">Create account</a></div>
+        </div>
+
+        <!-- REGISTER PANEL -->
+        <div class="form-panel" id="panel-register">
+          <div class="form-title">Create account</div>
+          <div class="form-sub">Register your PLSP student portal</div>
+          <div class="error-msg" id="reg-error"><p id="reg-error-text"></p></div>
+          <div class="success-msg" id="reg-success"><p>Account created! Please check your email.</p></div>
+          <div class="row2">
+            <div class="field"><label>First Name</label><input type="text" id="reg-fname" placeholder="Juan" /></div>
+            <div class="field"><label>Last Name</label><input type="text" id="reg-lname" placeholder="dela Cruz" /></div>
+          </div>
+          <div class="field"><label>Student ID</label><input type="text" id="reg-sid" placeholder="e.g. 2024-12345" /></div>
+          <div class="field"><label>PLSP Email</label><input type="email" id="reg-email" placeholder="yourname@plsp.edu.ph" /></div>
+          <div class="field">
+            <label>Course / Program</label>
+            <select id="reg-course">
+              <option value="">Select your program</option>
+              <option>BS Information Technology</option>
+              <option>BS Computer Science</option>
+              <option>BS Business Administration</option>
+              <option>BS Nursing</option>
+              <option>BS Education</option>
+              <option>BS Engineering</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <div class="pass-wrap">
+              <input type="password" id="reg-pass" placeholder="Create a strong password" oninput="checkStrength(this.value)" />
+              <button class="eye-btn" onclick="togglePass('reg-pass',this)" aria-label="Toggle password">
+                <i class="ti ti-eye"></i>
+              </button>
+            </div>
+            <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+            <div class="strength-label" id="strength-label"></div>
+          </div>
+          <div class="field">
+            <label>Confirm Password</label>
+            <div class="pass-wrap">
+              <input type="password" id="reg-pass2" placeholder="Repeat your password" />
+              <button class="eye-btn" onclick="togglePass('reg-pass2',this)" aria-label="Toggle password">
+                <i class="ti ti-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="agree" />
+            <label for="agree">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> of PLSP Smart Campus</label>
+          </div>
+          <button class="submit-btn" onclick="doRegister()">Create Account →</button>
+          <div class="divider"><div class="divider-line"></div><span class="divider-text">or</span><div class="divider-line"></div></div>
+          <button class="google-btn" onclick="showGoogleModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+          <div class="bottom-link">Already have an account? <a onclick="switchTab('login')">Sign in</a></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal-bg" id="forgot-modal">
+  <div class="modal">
+    <div class="modal-icon"><i class="ti ti-mail"></i></div>
+    <div class="modal-title">Reset password</div>
+    <div class="modal-sub">Enter your PLSP email and we'll send you a link to reset your password.</div>
+    <input class="modal-input" type="email" id="forgot-email" placeholder="yourname@plsp.edu.ph" />
+    <button class="modal-btn" onclick="sendReset()">Send reset link</button>
+    <button class="modal-cancel" onclick="closeModal('forgot-modal')">Cancel</button>
+  </div>
+</div>
+
+<!-- GOOGLE SIGN-IN MODAL -->
+<div class="google-modal-bg" id="google-modal">
+  <div class="google-modal">
+    <svg class="g-logo" viewBox="0 0 48 48">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    </svg>
+    <div class="g-title">Sign in with Google</div>
+    <div class="g-sub">Choose an account to continue to PLSP Smart Campus</div>
+    <div class="g-accounts">
+      <div class="g-account" onclick="selectGoogleAccount('Juan dela Cruz','juan.delacruz@gmail.com')">
+        <div class="g-avatar" style="background:#1a73e8">J</div>
+        <div>
+          <div class="g-account-name">Juan dela Cruz</div>
+          <div class="g-account-email">juan.delacruz@gmail.com</div>
+        </div>
+      </div>
+      <div class="g-account" onclick="selectGoogleAccount('Maria Santos','maria.santos@gmail.com')">
+        <div class="g-avatar" style="background:#34a853">M</div>
+        <div>
+          <div class="g-account-name">Maria Santos</div>
+          <div class="g-account-email">maria.santos@gmail.com</div>
+        </div>
+      </div>
+    </div>
+    <hr class="g-divider" />
+    <button class="g-use-another">Use another account</button>
+    <button class="g-cancel" onclick="closeModal('google-modal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.form-panel').forEach(e => e.classList.remove('active'));
+    document.getElementById('tab-' + t).classList.add('active');
+    document.getElementById('panel-' + t).classList.add('active');
+  }
+
+  function togglePass(id, btn) {
+    const inp = document.getElementById(id);
+    const ic = btn.querySelector('i');
+    if (inp.type === 'password') { inp.type = 'text'; ic.className = 'ti ti-eye-off'; }
+    else { inp.type = 'password'; ic.className = 'ti ti-eye'; }
+  }
+
+  function checkStrength(v) {
+    const fill = document.getElementById('strength-fill');
+    const lbl = document.getElementById('strength-label');
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    const levels = [['', ''], ['25%', '#e24b4a'], ['50%', '#ef9f27'], ['75%', '#639922'], ['100%', '#4ade80']];
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    fill.style.width = levels[score][0];
+    fill.style.background = levels[score][1];
+    lbl.textContent = v ? labels[score] : '';
+    lbl.style.color = levels[score][1];
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id + '-error');
+    document.getElementById(id + '-error-text').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  function doLogin() {
+    const id = document.getElementById('login-id').value.trim();
+    const pw = document.getElementById('login-pass').value;
+    if (!id) { showError('login', 'Please enter your Student ID or Email.'); return; }
+    if (!pw) { showError('login', 'Please enter your password.'); return; }
+    const s = document.getElementById('login-success');
+    document.getElementById('login-success-text').textContent = 'Signed in successfully! Redirecting...';
+    s.classList.add('show');
+    setTimeout(() => { window.location.href = 'main.html'; }, 1500);
+  }
+
+  function doRegister() {
+    const fn = document.getElementById('reg-fname').value.trim();
+    const ln = document.getElementById('reg-lname').value.trim();
+    const sid = document.getElementById('reg-sid').value.trim();
+    const em = document.getElementById('reg-email').value.trim();
+    const cr = document.getElementById('reg-course').value;
+    const pw = document.getElementById('reg-pass').value;
+    const pw2 = document.getElementById('reg-pass2').value;
+    const ag = document.getElementById('agree').checked;
+    if (!fn || !ln) { showError('reg', 'Please enter your full name.'); return; }
+    if (!sid) { showError('reg', 'Please enter your Student ID.'); return; }
+    if (!em || !em.includes('@')) { showError('reg', 'Please enter a valid email address.'); return; }
+    if (!cr) { showError('reg', 'Please select your program.'); return; }
+    if (pw.length < 8) { showError('reg', 'Password must be at least 8 characters.'); return; }
+    if (pw !== pw2) { showError('reg', 'Passwords do not match.'); return; }
+    if (!ag) { showError('reg', 'Please agree to the Terms of Service.'); return; }
+    const s = document.getElementById('reg-success');
+    s.classList.add('show');
+    setTimeout(() => { window.location.href = 'main.html'; }, 1500);
+  }
+
+  function showForgot() { document.getElementById('forgot-modal').classList.add('show'); }
+  function showGoogleModal() { document.getElementById('google-modal').classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+  function sendReset() {
+    const em = document.getElementById('forgot-email').value.trim();
+    if (!em || !em.includes('@')) return;
+    closeModal('forgot-modal');
+    const s = document.getElementById('login-success');
+    document.getElementById('login-success-text').textContent = 'Password reset link sent! Check your email.';
+    s.classList.add('show');
+    setTimeout(() => s.classList.remove('show'), 3000);
+  }
+
+  function selectGoogleAccount(name, email) {
+    closeModal('google-modal');
+    const s = document.getElementById('login-success');
+    document.getElementById('login-success-text').textContent = 'Signed in as ' + name + '! Redirecting...';
+    s.classList.add('show');
+    setTimeout(() => { window.location.href = 'main.html'; }, 1500);
+  }
+
+  document.getElementById('forgot-modal').addEventListener('click', function(e) { if (e.target === this) closeModal('forgot-modal'); });
+  document.getElementById('google-modal').addEventListener('click', function(e) { if (e.target === this) closeModal('google-modal'); });
+</script>
+
+</body>
+</html>
